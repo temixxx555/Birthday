@@ -13,6 +13,7 @@
         overflow: hidden;
         background-color: #f5f5f5;
       }
+
       .music-control {
         position: fixed;
         bottom: 20px;
@@ -67,6 +68,7 @@
         cursor: pointer;
         border: none;
       }
+
       .page {
         display: none;
         height: 100vh;
@@ -128,18 +130,6 @@
         animation: gradientBG 15s ease infinite;
       }
 
-      @keyframes gradientBG {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
-      }
-
       #birthday {
         background: linear-gradient(to bottom, #ffccff, #ff99cc);
         overflow: hidden;
@@ -159,11 +149,10 @@
       }
 
       .gallery-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 20px;
+        display: flex;
+        flex-direction: column;
         padding: 20px;
-        max-width: 1200px;
+        max-width: 100%;
         margin: 0 auto;
       }
 
@@ -176,6 +165,7 @@
         cursor: pointer;
         transition: transform 0.3s, box-shadow 0.3s;
         filter: brightness(0.9);
+        margin-bottom: 20px;
       }
 
       .gallery-img:hover {
@@ -274,7 +264,11 @@
         }
 
         .gallery-container {
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          padding: 10px;
+        }
+
+        .gallery-img {
+          height: 100px;
         }
 
         h1 {
@@ -324,7 +318,7 @@
       <div class="nav-dot" onclick="nextPage('gallery')"></div>
     </div>
 
-    <div id="home" class="page active">
+    <div id="home" class="page">
       <div>
         <h1 class="dynamic-text">Welcome, Eniola! 🎉</h1>
         <p class="dynamic-text">
@@ -395,21 +389,9 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         // Attempt to play music as soon as the page loads
-        bgMusic.volume = 0.5; // Set default volume
-        bgMusic
-          .play()
-          .then(() => {
-            playPauseBtn.textContent = "⏸️"; // Show pause icon since music is playing
-          })
-          .catch((error) => {
-            console.log(
-              "Autoplay prevented. User interaction required:",
-              error
-            );
-            // If autoplay is blocked, set button to play state
-            isPlaying = false;
-            playPauseBtn.textContent = "▶️";
-          });
+        bgMusic.play();
+        playPauseBtn.textContent = "⏸️";
+        isPlaying = true;
       });
 
       function toggleMusic() {
@@ -417,14 +399,8 @@
           bgMusic.pause();
           playPauseBtn.textContent = "▶️"; // Change to play icon
         } else {
-          bgMusic
-            .play()
-            .then(() => {
-              playPauseBtn.textContent = "⏸️"; // Change to pause icon
-            })
-            .catch((error) => {
-              console.log("Play prevented:", error);
-            });
+          bgMusic.play();
+          playPauseBtn.textContent = "⏸️"; // Change to pause icon
         }
         isPlaying = !isPlaying; // Toggle state
       }
@@ -521,17 +497,14 @@
           nextPage(pageOrder[prevIndex]);
         }
       }
-      // Handle page visibility changes
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden && isPlaying) {
-          bgMusic.pause();
-          playPauseBtn.textContent = "▶️";
-          isPlaying = false;
-        }
-      });
 
-      // Initialize volume
-      bgMusic.volume = volumeSlider.value;
+      // Initialize the first page
+      nextPage("home");
+
+      // Initialize the music
+      bgMusic.play();
+      playPauseBtn.textContent = "⏸️";
+      isPlaying = true;
     </script>
   </body>
 </html>
