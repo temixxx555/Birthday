@@ -159,7 +159,7 @@
         color: white;
         display: flex;
         flex-direction: column;
-        overflow: hidden; /* Prevent page scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
       }
 
       .gallery-container {
@@ -170,7 +170,6 @@
         max-width: 1200px;
         margin: 0 auto;
         overflow-y: auto; /* Enable scrolling within the gallery */
-        height: 70vh; /* Set a fixed height for the gallery */
       }
 
       .gallery-img {
@@ -485,23 +484,14 @@
       // Touch swipe navigation
       let touchStartX = 0;
       let touchEndX = 0;
-      let isScrollingGallery = false;
 
       document.addEventListener("touchstart", (e) => {
         touchStartX = e.changedTouches[0].screenX;
-        // Check if the touch is inside the gallery container
-        const galleryContainer = document.querySelector(".gallery-container");
-        if (galleryContainer && galleryContainer.contains(e.target)) {
-          isScrollingGallery = true;
-        }
       });
 
       document.addEventListener("touchend", (e) => {
         touchEndX = e.changedTouches[0].screenX;
-        if (!isScrollingGallery) {
-          handleSwipe();
-        }
-        isScrollingGallery = false; // Reset the flag
+        handleSwipe();
       });
 
       function handleSwipe() {
